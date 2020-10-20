@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>지누스쿠버</title>
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>-->
+    <meta name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0, shrink-to-fit=no"/>
+
+    <meta property="og:title" content="지누스쿠버"/>
+    <meta property="og:description" content="너도 다이빙할 수 이써!"/>
+    <meta property="og:url" content="scubawithgnb.shop"/>
+    <meta property="og:image" content="{{ url_for('static', filename='nudi.png') }}"/>
+
+    <!--  font  -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        /*Extra small devices (portrait phones, less than 576px)*/
+        /*No media query for `xs` since this is the default in Bootstrap*/
+
+        /*Small devices (landscape phones, 576px and up)*/
+        body {
+            background-color: darkmagenta;
+            font-size: 11px;
+        }
+
+        .col, .col-1, .col-2{
+                padding-right: 10px;
+                padding-left: 10px;
+            }
+
+        .wrap {
+            margin-bottom: 32px;
+        }
+
+        .community-wrap {
+        }
+
+        #text {
+            display: none;
+        }
+
+        #pw {
+            display: none;
+        }
+
+        .thead {
+            border-radius: 10px 10px;
+        }
+
+        @media (min-width: 576px) {
+            body {
+                background-color: cornflowerblue;
+            }
+        }
+
+        /*// Medium devices (tablets, 768px and up)*/
+        @media (min-width: 768px) {
+            body {
+                background-color: indianred;
+                font-size: 1rem;
+            }
+        }
+
+        /*// Large devices (desktops, 992px and up)*/
+        @media (min-width: 992px) {
+            body {
+                background-color: darkseagreen;
+                font-size: 1rem;
+            }
+        }
+
+        /*// Extra large devices (large desktops, 1200px and up)*/
+        @media (min-width: 1200px) {
+            body {
+                background-color: goldenrod;
+                font-size: 1rem;
+            }
+        }
+    </style>
+
+    <script>
+
+        $(function () {
+            $(window).resize(function () {
+                let width = $(window).width();
+                if (width < 576) {
+                    $('#number').removeClass('col-1');
+                    $('#number').addClass('col-2');
+                    $('#noshow').removeClass('col-1');
+                    $('#noshow').addClass('col-2');
+                    $('noshow-content').removeClass('col-1');
+                    $('noshow-content').addClass('col-2');
+                } else {
+                    $('#number').removeClass('col-2');
+                    $('#number').addClass('col-1');
+                    $('#noshow').removeClass('col-2');
+                    $('#noshow').addClass('col-1');
+                    $('noshow-content').removeClass('col-2');
+                    $('noshow-content').addClass('col-1');
+                }
+            });
+
+            $(window).trigger("resize");
+        });
+
+        $(document).ready(function () {
+            getCommunity()
+            $('#conmmunity-contents').on("click", "div#contents", function () {
+                if ($(this).children("#info").children("#noshow").text() == "O" && !$(this).children("#text").is(":visible")) {
+                    let pw = prompt("비밀번호를 입력하세요");
+                    if (pw == null) {
+                        return;
+                    } else if (pw != $(this).children("#info").children("#pw").text()) {
+                        alert("비밀번호가 틀렸습니다");
+                        return;
+                    }
+                }
+                if ($(this).children("#text").is(":visible")) {
+                    $(this).children("#text").hide();
+                } else {
+                    $(this).children("#text").css("display", "flex");
+                }
+                if ($(this).children("#info").hasClass("list-group-item-secondary")) {
+                    $(this).children("#info").removeClass("list-group-item-secondary");
+                } else {
+                    $(this).children("#info").addClass("list-group-item-secondary");
+                }
+            });
+        });
+
+        function getCommunity() {
+            $.ajax({
+                type: "GET",
+                url: "/community-form",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        let communities = response["communities"];
+                        for (let i = 0; i < communities.length; i++) {
+                            let name = communities[i]['community_name'];
+                            let password = communities[i]['community_password'];
+                            let title = communities[i]['community_title'];
+                            let text = communities[i]['community_text'];
+                            let noshow = communities[i]['community_noshow'];
+
+                            let width = $(window).width();
+                            let res = "";
+                            if (width < 576) {
+                                res = "col-2"
+                            }
+                            else
+                            {
+                                res = "col-1"
+                            }
+
+                            let tmp_html = `<div id="contents" class="list-group-item list-group-item-action">
+                                                <div id="info" class="row rounded">
+                                                    <div id="number" class=${res}>${i + 1}</div>
+                                                    <div class="col-2">${name}</div>
+                                                    <div class="col">${title}</div>
+                                                    <div id="noshow" class=${res}>${noshow}</div>
+                                                    <div id="pw" class="col">${password}</div>
+                                                </div>
+                                                <div id="text" class="row">
+                                                    <div id="noshow-content" class=${res}>내용</div>
+                                                    <div class="col">${text}</div>
+                                                </div>
+                                            </div>`;
+                            $('#conmmunity-contents').append(tmp_html);
+                        }
+                    } else {
+                        alert("리뷰를 받아오지 못했습니다");
+                    }
+                }
+            });
+        };
+
+        function formSubmit() {
+            let name = $('#community-name').val();
+            let password = $('#community-password').val();
+            let text = $('#community-text').val();
+            text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
+            let noshow = '';
+            $('#community-noshow').is(":checked") ? noshow = "O" : noshow = "X";
+            let title = $('#community-title').val();
+            console.log(text)
+            $.ajax({
+                type: "POST",
+                url: "/community-form",
+                data: {name: name, password: password, text: text, noshow: noshow, title: title},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert(response["msg"]);
+                        window.location.reload();
+                    }
+                }
+            });
+        };
+    </script>
+</head>
+<body>
+<div class="jumbotron">
+    <h1 class="display-4">안녕하세요~!</h1>
+    <p class="lead">스쿠버 강사 배진우입니다! 남녀노소 누구든 다이빙을 배워보고 싶으신 분들 다 오세요!</p>
+    <hr class="my-4">
+    <p>IANTD 강사 배진우 입니다!</p>
+    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+</div>
+<div class="container wrap">
+    <div id="conmmunity-contents" class="list-group">
+        <div class="list-group-item list-group-item-dark">
+            <div class="row">
+                <div id="number" class="col-1">글목록</div>
+                <div class="col-2">작성자</div>
+                <div class="col">제목</div>
+                <div id="noshow" class="col-1">비밀글</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container wrap">
+    <div class="row">
+        <div class="col">
+            <label for="community-name">작성자</label>
+            <input type="text" class="form-control" id="community-name" name="community-name" required>
+        </div>
+        <div class="col">
+            <label for="community-password">비밀번호</label>
+            <input type="password" class="form-control" id="community-password" name="community-password">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="community-title">제목</label>
+            <input type="text" class="form-control" id="community-title" name="community-name" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="community-text">내용</label>
+            <textarea class="form-control" id="community-text" name="community-text" rows="3"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <input type="checkbox" id="community-noshow" name="community-noshow">
+            <label for="community-noshow">비공개</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button type="button" class="btn btn-primary" onclick="formSubmit()">작성</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
