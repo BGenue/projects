@@ -40,28 +40,36 @@
             font-size: 11px;
         }
 
-        .col, .col-1, .col-2{
-                padding-right: 10px;
-                padding-left: 10px;
-            }
+        #contents .col, .col-1, .col-2 {
+            padding-right: 10px;
+            padding-left: 10px;
+        }
 
         .wrap {
-            margin-bottom: 32px;
+            margin-bottom: 10px;
         }
 
-        .community-wrap {
+        #contents-text {
+            display: none;
+            padding-top: 5px;
         }
 
-        #text {
+        #fix-del {
+            display: none;
+            padding-top: 5px;
+            z-index: 1;
+        }
+
+        #pw, #id {
             display: none;
         }
 
-        #pw {
-            display: none;
+        #write-btn {
+            margin-top: 5px;
         }
 
-        .thead {
-            border-radius: 10px 10px;
+        #write-community {
+            display: none;
         }
 
         @media (min-width: 576px) {
@@ -96,46 +104,50 @@
     </style>
 
     <script>
-
+        //핸드폰 화면일때
         $(function () {
             $(window).resize(function () {
                 let width = $(window).width();
                 if (width < 576) {
                     $('#number').removeClass('col-1');
                     $('#number').addClass('col-2');
-                    $('#noshow').removeClass('col-1');
-                    $('#noshow').addClass('col-2');
-                    $('noshow-content').removeClass('col-1');
-                    $('noshow-content').addClass('col-2');
+                    $('#secrete').removeClass('col-1');
+                    $('#secrete').addClass('col-2');
+                    $('secrete-content').removeClass('col-1');
+                    $('secrete-content').addClass('col-2');
                 } else {
                     $('#number').removeClass('col-2');
                     $('#number').addClass('col-1');
-                    $('#noshow').removeClass('col-2');
-                    $('#noshow').addClass('col-1');
-                    $('noshow-content').removeClass('col-2');
-                    $('noshow-content').addClass('col-1');
+                    $('#secrete').removeClass('col-2');
+                    $('#secrete').addClass('col-1');
+                    $('secrete-content').removeClass('col-2');
+                    $('secrete-content').addClass('col-1');
                 }
             });
 
             $(window).trigger("resize");
         });
 
+        //게시판 글들에 클릭이벤트 부여
         $(document).ready(function () {
             getCommunity()
             $('#conmmunity-contents').on("click", "div#contents", function () {
-                if ($(this).children("#info").children("#noshow").text() == "O" && !$(this).children("#text").is(":visible")) {
+                if ($(this).children("#contents-index").children("#info").children("#secrete").text() == "O" && !$(this).children("#contents-index").children("#contents-text").is(":visible")) {
                     let pw = prompt("비밀번호를 입력하세요");
                     if (pw == null) {
                         return;
-                    } else if (pw != $(this).children("#info").children("#pw").text()) {
+                    } else if (pw != $(this).children("#contents-index").children("#info").children("#pw").text()) {
                         alert("비밀번호가 틀렸습니다");
                         return;
                     }
                 }
-                if ($(this).children("#text").is(":visible")) {
-                    $(this).children("#text").hide();
+                if ($(this).children("#contents-index").children("#contents-text").is(":visible")) {
+                    $(this).children("#contents-index").children("#contents-text").hide();
+                    $(this).children("#fix-del").hide();
+
                 } else {
-                    $(this).children("#text").css("display", "flex");
+                    $(this).children("#contents-index").children("#contents-text").css("display", "flex");
+                    $(this).children("#fix-del").css("display", "flex");
                 }
                 if ($(this).children("#info").hasClass("list-group-item-secondary")) {
                     $(this).children("#info").removeClass("list-group-item-secondary");
@@ -143,8 +155,15 @@
                     $(this).children("#info").addClass("list-group-item-secondary");
                 }
             });
+
+            //게시글 삭제
+            deleteCommunity();
+
+            //게시글 수정
+            fixCommunity();
         });
 
+        //get 방식으로 db에서 게시글 가져와
         function getCommunity() {
             $.ajax({
                 type: "GET",
@@ -158,29 +177,35 @@
                             let password = communities[i]['community_password'];
                             let title = communities[i]['community_title'];
                             let text = communities[i]['community_text'];
-                            let noshow = communities[i]['community_noshow'];
+                            let secrete = communities[i]['community_secrete'];
+                            let id = communities[i]['community_id'];
 
                             let width = $(window).width();
                             let res = "";
                             if (width < 576) {
                                 res = "col-2"
-                            }
-                            else
-                            {
+                            } else {
                                 res = "col-1"
                             }
 
                             let tmp_html = `<div id="contents" class="list-group-item list-group-item-action">
-                                                <div id="info" class="row rounded">
-                                                    <div id="number" class=${res}>${i + 1}</div>
-                                                    <div class="col-2">${name}</div>
-                                                    <div class="col">${title}</div>
-                                                    <div id="noshow" class=${res}>${noshow}</div>
-                                                    <div id="pw" class="col">${password}</div>
+                                                <div id="contents-index">
+                                                    <div id="info" class="row">
+                                                        <div id="number" class=${res}>${i + 1}</div>
+                                                        <div id="name" class="col-2">${name}</div>
+                                                        <div id="title" class="col">${title}</div>
+                                                        <div id="secrete" class=${res}>${secrete}</div>
+                                                        <div id="pw">${password}</div>
+                                                        <div id="id">${id}</div>
+                                                    </div>
+                                                    <div id="contents-text" class="row">
+                                                        <div id="secrete-content" class=${res}>내용</div>
+                                                        <div id="content" class="col">${text}</div>
+                                                    </div>
                                                 </div>
-                                                <div id="text" class="row">
-                                                    <div id="noshow-content" class=${res}>내용</div>
-                                                    <div class="col">${text}</div>
+                                                <div id="fix-del" class="row">
+                                                    <div id="fix" class="col-1 offset-md-10">수정</div>
+                                                    <div id="del" class="col-1">삭제</div>
                                                 </div>
                                             </div>`;
                             $('#conmmunity-contents').append(tmp_html);
@@ -192,27 +217,125 @@
             });
         };
 
-        function formSubmit() {
+        //post 방식으로 db에 글 저장해
+        function writeCommunity(tmp) {
             let name = $('#community-name').val();
             let password = $('#community-password').val();
+            let title = $('#community-title').val();
             let text = $('#community-text').val();
             text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
-            let noshow = '';
-            $('#community-noshow').is(":checked") ? noshow = "O" : noshow = "X";
-            let title = $('#community-title').val();
-            console.log(text)
-            $.ajax({
-                type: "POST",
-                url: "/community-form",
-                data: {name: name, password: password, text: text, noshow: noshow, title: title},
-                success: function (response) {
-                    if (response["result"] == "success") {
-                        alert(response["msg"]);
-                        window.location.reload();
-                    }
+            let secrete = '';
+            $('#community-secrete').is(":checked") ? secrete = "O" : secrete = "X";
+            let id = $('#community-id').val();
+
+            if (tmp == '작성') {
+                if ($('#conmmunity-contents').children('#contents').length == 0) {
+                    id = 0;
+                } else {
+                    id = Number($('#conmmunity-contents').children('#contents').last().find("#id").text()) + 1;
                 }
-            });
+                $.ajax({
+                    type: "POST",
+                    url: "/community-form",
+                    data: {name: name, password: password, text: text, secrete: secrete, title: title, id: id},
+                    success: function (response) {
+                        if (response["result"] == "success") {
+                            alert(response["msg"]);
+                            window.location.reload();
+                        }
+                    }
+                });
+            } else if (tmp == '수정') {
+                //비밀번호 물어봐
+                let pw = prompt("비밀번호를 입력하세요");
+                if (password == pw) {
+                    alert("비밀번호 확인");
+                    $.ajax({
+                        type: "POST",
+                        url: "/community-form/fix",
+                        data: {name: name, password: password, text: text, secrete: secrete, title: title, id: id},
+                        success: function (response) {
+                            if (response["result"] == "success") {
+                                alert(response["msg"]);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                } else {
+                    alert("비밀번호 틀림");
+                }
+            }
+
         };
+
+        //게시글 작성 펼치기
+        function toggleWrite(tmp) {
+            if (tmp == "닫기") {
+                $('#write-btn').text('글쓰기');
+                $('#community-name').val('');
+                $('#community-password').val('');
+                $('#community-title').val('');
+                $('#community-text').val('');
+                $('#community-secrete').prop('checked', false)
+                $('#write-community').hide();
+            } else {
+                $('#write-btn').text('닫기');
+                $('#write-community-btn').text('작성');
+                $('#write-community').show();
+            }
+        };
+
+        //게시글 삭제
+        function deleteCommunity() {
+            $('#conmmunity-contents').on("click", "#del", function (event) {
+                let id = $(this).parent().parent().children("#contents-index").children("#info").children("#id").text();
+                let password = $(this).parent().parent().children("#contents-index").children("#info").children("#pw").text();
+                let pw = prompt("비밀번호를 입력하세요");
+                if (password == pw) {
+                    alert("비밀번호 확인");
+                    $.ajax({
+                        type: "POST",
+                        url: "/community-form/del",
+                        data: {id: id},
+                        success: function (response) {
+                            if (response["result"] == "success") {
+                                alert(response["msg"]);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                } else {
+                    alert("비밀번호 틀림");
+                }
+                event.stopPropagation();
+            });
+        }
+
+        //게시글 수정
+        function fixCommunity() {
+            $('#conmmunity-contents').on("click", "#fix", function (event) {
+                let name = $(this).parent().parent().children("#contents-index").children("#info").children("#name").text();
+                let title = $(this).parent().parent().children("#contents-index").children("#info").children("#title").text();
+                let pw = $(this).parent().parent().children("#contents-index").children("#info").children("#pw").text();
+                let secrete = $(this).parent().parent().children("#contents-index").children("#info").children("#secrete").text();
+                let content = $(this).parent().parent().children("#contents-index").children("#contents-text").children("#content").html().replace("<br>", "\n");
+                let id = $(this).parent().parent().children("#contents-index").children("#info").children("#id").text();
+
+                $('#write-btn').text('닫기');
+                $('#write-community-btn').text('수정');
+                $('#community-name').val(name);
+                $('#community-title').val(title);
+                $('#community-password').val(pw);
+                $('#community-text').val(content);
+                $('#community-id').val(id);
+                if (secrete == 'O') {
+                    $('#community-secrete').prop("checked", true);
+                }
+                $('#write-community').show();
+                event.stopPropagation();
+            });
+        }
+
     </script>
 </head>
 <body>
@@ -229,18 +352,23 @@
         <div class="list-group-item list-group-item-dark">
             <div class="row">
                 <div id="number" class="col-1">글목록</div>
-                <div class="col-2">작성자</div>
-                <div class="col">제목</div>
-                <div id="noshow" class="col-1">비밀글</div>
+                <div id="name" class="col-2">작성자</div>
+                <div id="title" class="col">제목</div>
+                <div id="secrete" class="col-1">비밀글</div>
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <button id="write-btn" type="button" class="btn btn-primary float-right" onclick="toggleWrite(this.innerHTML)">글쓰기</button>
+        </div>
+    </div>
 </div>
-<div class="container wrap">
+<div id="write-community" class="container wrap">
     <div class="row">
         <div class="col">
             <label for="community-name">작성자</label>
-            <input type="text" class="form-control" id="community-name" name="community-name" required>
+            <input type="text" class="form-control " id="community-name" name="community-name">
         </div>
         <div class="col">
             <label for="community-password">비밀번호</label>
@@ -250,7 +378,7 @@
     <div class="row">
         <div class="col">
             <label for="community-title">제목</label>
-            <input type="text" class="form-control" id="community-title" name="community-name" required>
+            <input type="text" class="form-control" id="community-title" name="community-title">
         </div>
     </div>
     <div class="row">
@@ -261,13 +389,14 @@
     </div>
     <div class="row">
         <div class="col">
-            <input type="checkbox" id="community-noshow" name="community-noshow">
-            <label for="community-noshow">비공개</label>
+            <input type="checkbox" id="community-secrete" name="community-secrete">
+            <input type="checkbox" id="community-id" name="community-secrete" style="display:none;">
+            <label for="community-secrete">비공개</label>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <button type="button" class="btn btn-primary" onclick="formSubmit()">작성</button>
+            <button id="write-community-btn" type="button" class="btn btn-primary" onclick="writeCommunity(this.innerHTML)">작성</button>
         </div>
     </div>
 </div>
