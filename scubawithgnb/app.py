@@ -4,11 +4,13 @@ app = Flask(__name__)
 
 from pymongo import MongoClient
 
+import os
+
 #local서버용
-client = MongoClient('localhost', 27017)
+#client = MongoClient('localhost', 27017)
 
 #배포용
-#client = MongoClient('mongodb://test:test@localhost',27017)
+client = MongoClient('mongodb://test:test@localhost',27017)
 db = client.scubapage
 
 
@@ -32,6 +34,14 @@ def board():
 @app.route('/photo')
 def photo():
     return render_template('photo.html', title="다이비 사진")
+
+@app.route('/photo-list')
+def photo_list():
+    path = "./static/diving"
+    photo_list = os.listdir(path)
+    print(photo_list);
+    list={'photo_list': photo_list}
+    return list;
 
 @app.route('/plan')
 def plan():
