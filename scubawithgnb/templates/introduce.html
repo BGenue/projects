@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>강사 소개</title>
+
+    <meta name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0, shrink-to-fit=no"/>
+
+    <meta property="og:title" content="지누스쿠버"/>
+    <meta property="og:description" content="너도 다이빙할 수 이써!"/>
+    <meta property="og:url" content="scubawithgnb.shop"/>
+    <meta property="og:image" content="{{ url_for('static', filename='nudi.png') }}"/>
+
+    <!--  font  -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!--  css  -->
+    <link rel="stylesheet" type="text/css" href="static/index.css"/>
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <style>
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /*.img-container {*/
+        /*    height: auto;*/
+        /*    width: 400px;*/
+        /*}*/
+
+        @media (max-width: 576px) {
+            .img-container {
+                margin: auto;
+                height: auto;
+                width: 400px;
+            }
+        }
+
+        li{
+            word-wrap: break-word;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            $(window).resize(function () {
+                let width = $(window).width();
+                if (width < 576) {
+                    $('#img-col').removeClass('col-5');
+                    $('#img-col').addClass('col-12');
+                    $('#explain-col').removeClass('col');
+                    $('#explain-col').addClass('col-12');
+                } else {
+                    $('#img-col').removeClass('col-12');
+                    $('#img-col').addClass('col-5');
+                    $('#explain-col').removeClass('col-12');
+                    $('#explain-col').addClass('col');
+                }
+            });
+
+            $(window).trigger("resize");
+        });
+    </script>
+</head>
+<body>
+<div class="jumbotron">
+    <h1 class="display-4">안녕하세요~!</h1>
+    <p class="lead">다이빙 배우실 준비 되셨나요!?</p>
+    <hr class="my-4">
+    <p>IANTD 강사 배진우 입니다!</p>
+    <div role="navigation">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="nav-item"><a class="nav-link" href="/">메인</a></li>
+            <li class="nav-item"><a class="nav-link active" href="introduce">강사 소개</a></li>
+            <li class="nav-item"><a class="nav-link" href="course">교육 과정</a></li>
+            <li class="nav-item"><a class="nav-link" href="board">질의 게시판</a></li>
+            <li class="nav-item"><a class="nav-link" href="photo">다이빙 사진</a></li>
+            <li class="nav-item"><a class="nav-link" href="plan">다이빙 일정</a></li>
+        </ul>
+    </div>
+</div>
+<div class="jumbotron">
+    <div class="row">
+        <div id="img-col" class="col-5">
+            <div class="img-container">
+                <img src="static/introduce.png" class="img-thumbnail img-fluid" alt="내 사진">
+            </div>
+        </div>
+        <div id="explain-col" class="col">
+            <div>
+                <ul>
+                    <li>IANTD 강사</li>
+                    <li>나이트록스 강사</li>
+                    <li>스페셜티 - 네비게이션</li>
+                    <li>스페셜티 - 보트다이빙</li>
+                    <li>스페셜티 - 딥다이빙</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

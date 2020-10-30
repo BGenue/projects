@@ -15,7 +15,27 @@ db = client.scubapage
 ## HTML을 주는 부분
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('main.html', title="메인")
+
+@app.route('/introduce')
+def introduce():
+    return render_template('introduce.html', title="강사 소개")
+
+@app.route('/course')
+def course():
+    return render_template('course.html', title="교육 과정")
+
+@app.route('/board')
+def board():
+    return render_template('board.html', title="질의 게시판")
+
+@app.route('/photo')
+def photo():
+    return render_template('photo.html', title="다이비 사진")
+
+@app.route('/plan')
+def plan():
+    return render_template('plan.html', title="다이빙 일정")
 
 
 ## API 역할을 하는 부분

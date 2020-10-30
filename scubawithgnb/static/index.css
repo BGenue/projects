@@ -1,0 +1,84 @@
+* {
+    font-family: 'Jua', sans-serif;
+}
+
+/*Extra small devices (portrait phones, less than 576px)*/
+/*No media query for `xs` since this is the default in Bootstrap*/
+
+/*Small devices (landscape phones, 576px and up)*/
+
+body {
+    background-color: darkmagenta;
+    font-size: 11px;
+}
+
+#contents .col, .col-1, .col-2 {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.wrap {
+    margin-bottom: 10px;
+}
+
+#contents-text {
+    display: none;
+    padding-top: 5px;
+}
+
+#fix-del {
+    display: none;
+    padding-top: 5px;
+    z-index: 1;
+}
+
+#pw, #id {
+    display: none;
+}
+
+#write-btn {
+    margin-top: 5px;
+}
+
+#write-community {
+    display: none;
+}
+
+.hide {
+    display: none;
+}
+
+.jumbotron {
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+}
+
+@media (min-width: 576px) {
+    body {
+        background-color: cornflowerblue;
+    }
+}
+
+/*// Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {
+    body {
+        background-color: indianred;
+        font-size: 1rem;
+    }
+}
+
+/*// Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {
+    body {
+        background-color: darkseagreen;
+        font-size: 1rem;
+    }
+}
+
+/*// Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+    body {
+        background-color: goldenrod;
+        font-size: 1rem;
+    }
+}

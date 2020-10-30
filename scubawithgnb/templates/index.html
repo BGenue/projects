@@ -2,7 +2,12 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>지누스쿠버</title>
+
+    {% if title %}
+        <title>{{title}}</title>
+    {% else %}
+        <title>지누스쿠버</title>
+    {% endif %}
     <!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>-->
     <meta name="viewport"
           content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0, shrink-to-fit=no"/>
@@ -12,6 +17,7 @@
     <meta property="og:url" content="scubawithgnb.shop"/>
     <meta property="og:image" content="{{ url_for('static', filename='nudi.png') }}"/>
 
+
     <!--  font  -->
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
@@ -20,89 +26,14 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
 
+     <!--  css  -->
+    <link rel="stylesheet" type="text/css" href="static/index.css"/>
+
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
-
-    <style>
-        * {
-            font-family: 'Jua', sans-serif;
-        }
-
-        /*Extra small devices (portrait phones, less than 576px)*/
-        /*No media query for `xs` since this is the default in Bootstrap*/
-
-        /*Small devices (landscape phones, 576px and up)*/
-        body {
-            background-color: darkmagenta;
-            font-size: 11px;
-        }
-
-        #contents .col, .col-1, .col-2 {
-            padding-right: 10px;
-            padding-left: 10px;
-        }
-
-        .wrap {
-            margin-bottom: 10px;
-        }
-
-        #contents-text {
-            display: none;
-            padding-top: 5px;
-        }
-
-        #fix-del {
-            display: none;
-            padding-top: 5px;
-            z-index: 1;
-        }
-
-        #pw, #id {
-            display: none;
-        }
-
-        #write-btn {
-            margin-top: 5px;
-        }
-
-        #write-community {
-            display: none;
-        }
-
-        @media (min-width: 576px) {
-            body {
-                background-color: cornflowerblue;
-            }
-        }
-
-        /*// Medium devices (tablets, 768px and up)*/
-        @media (min-width: 768px) {
-            body {
-                background-color: indianred;
-                font-size: 1rem;
-            }
-        }
-
-        /*// Large devices (desktops, 992px and up)*/
-        @media (min-width: 992px) {
-            body {
-                background-color: darkseagreen;
-                font-size: 1rem;
-            }
-        }
-
-        /*// Extra large devices (large desktops, 1200px and up)*/
-        @media (min-width: 1200px) {
-            body {
-                background-color: goldenrod;
-                font-size: 1rem;
-            }
-        }
-    </style>
-
     <script>
         //핸드폰 화면일때
         $(function () {
@@ -339,66 +270,94 @@
     </script>
 </head>
 <body>
-<div class="jumbotron">
-    <h1 class="display-4">안녕하세요~!</h1>
-    <p class="lead">스쿠버 강사 배진우입니다! 남녀노소 누구든 다이빙을 배워보고 싶으신 분들 다 오세요!</p>
-    <hr class="my-4">
-    <p>IANTD 강사 배진우 입니다!</p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-</div>
-<div class="container wrap">
-    <div id="conmmunity-contents" class="list-group">
-        <div class="list-group-item list-group-item-dark">
-            <div class="row">
-                <div id="number" class="col-1">글목록</div>
-                <div id="name" class="col-2">작성자</div>
-                <div id="title" class="col">제목</div>
-                <div id="secrete" class="col-1">비밀글</div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <button id="write-btn" type="button" class="btn btn-primary float-right" onclick="toggleWrite(this.innerHTML)">글쓰기</button>
-        </div>
-    </div>
-</div>
-<div id="write-community" class="container wrap">
-    <div class="row">
-        <div class="col">
-            <label for="community-name">작성자</label>
-            <input type="text" class="form-control " id="community-name" name="community-name">
-        </div>
-        <div class="col">
-            <label for="community-password">비밀번호</label>
-            <input type="password" class="form-control" id="community-password" name="community-password">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <label for="community-title">제목</label>
-            <input type="text" class="form-control" id="community-title" name="community-title">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <label for="community-text">내용</label>
-            <textarea class="form-control" id="community-text" name="community-text" rows="3"></textarea>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <input type="checkbox" id="community-secrete" name="community-secrete">
-            <input type="checkbox" id="community-id" name="community-secrete" style="display:none;">
-            <label for="community-secrete">비공개</label>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <button id="write-community-btn" type="button" class="btn btn-primary" onclick="writeCommunity(this.innerHTML)">작성</button>
-        </div>
-    </div>
-</div>
+<!--<div class="jumbotron">-->
+<!--    <h1 class="display-4">안녕하세요~!</h1>-->
+<!--    <p class="lead">다이빙 배우실 준비 되셨나요!?</p>-->
+<!--    <hr class="my-4">-->
+<!--    <p>IANTD 강사 배진우 입니다!</p>-->
+<!--    <div role="navigation">-->
+<!--        <ul class="nav nav-tabs nav-justified">-->
+<!--            &lt;!&ndash;            <li role="presentation"><a class="btn btn-primary btn-lg" href="#" role="button">강사 소개</a></li>&ndash;&gt;-->
+<!--            &lt;!&ndash;            <li role="presentation"><a class="btn btn-primary btn-lg" href="#" role="button">교육 과정</a></li>&ndash;&gt;-->
+<!--            &lt;!&ndash;            <li role="presentation"><a class="btn btn-primary btn-lg" href="#" role="button">질의 게시판</a></li>&ndash;&gt;-->
+<!--            &lt;!&ndash;            <li role="presentation"><a class="btn btn-primary btn-lg" href="#" role="button">다이빙 사진</a></li>&ndash;&gt;-->
+<!--            &lt;!&ndash;            <li role="presentation"><a class="btn btn-primary btn-lg" href="#" role="button">다이빙 일정</a></li>&ndash;&gt;-->
+<!--            <li class="nav-item"><a class="nav-link active" href="/">메인</a></li>-->
+<!--            <li class="nav-item"><a class="nav-link" href="introduce.html">강사 소개</a></li>-->
+<!--            <li class="nav-item"><a class="nav-link" href="course.html">교육 과정</a></li>-->
+<!--            <li class="nav-item"><a class="nav-link" href="board.html">질의 게시판</a></li>-->
+<!--            <li class="nav-item"><a class="nav-link" href="photo.html">다이빙 사진</a></li>-->
+<!--            <li class="nav-item"><a class="nav-link" href="plan.html">다이빙 일정</a></li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="jumbotron">-->
+<!--    <h1 class="display-4">오픈워터 다이버 과정</h1>-->
+<!--    <p class="lead">OpenWater Diver Course</p>-->
+<!--    <hr class="my-4">-->
+<!--    <p>스쿠버 다이버가 되는 첫 단계입니다. 기본적으로 갖추어야 할 지식과 다이빙 스킬을 배우는 과정입니다.</p>-->
+<!--    <a class="btn btn-primary btn-lg" href="course.html" role="button">과정 소개</a>-->
+<!--</div>-->
+<!--<div class="jumbotron">-->
+<!--    <h1 class="display-4">체험다이빙</h1>-->
+<!--    <p class="lead">스쿠버 다이빙 맛보기를 원하시는분!</p>-->
+<!--    <hr class="my-4">-->
+<!--    <p></p>-->
+<!--    <a class="btn btn-primary btn-lg" href="course.html" role="button">과정 소개</a>-->
+<!--</div>-->
+<!--<div class="container wrap">-->
+<!--    <div id="conmmunity-contents" class="list-group">-->
+<!--        <div class="list-group-item list-group-item-dark">-->
+<!--            <div class="row">-->
+<!--                <div id="number" class="col-1">글목록</div>-->
+<!--                <div id="name" class="col-2">작성자</div>-->
+<!--                <div id="title" class="col">제목</div>-->
+<!--                <div id="secrete" class="col-1">비밀글</div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--        <div class="col">-->
+<!--            <button id="write-btn" type="button" class="btn btn-primary float-right" onclick="toggleWrite(this.innerHTML)">글쓰기</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div id="write-community" class="container wrap">-->
+<!--    <div class="row">-->
+<!--        <div class="col">-->
+<!--            <label for="community-name">작성자</label>-->
+<!--            <input type="text" class="form-control " id="community-name" name="community-name">-->
+<!--        </div>-->
+<!--        <div class="col">-->
+<!--            <label for="community-password">비밀번호</label>-->
+<!--            <input type="password" class="form-control" id="community-password" name="community-password">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--        <div class="col">-->
+<!--            <label for="community-title">제목</label>-->
+<!--            <input type="text" class="form-control" id="community-title" name="community-title">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--        <div class="col">-->
+<!--            <label for="community-text">내용</label>-->
+<!--            <textarea class="form-control" id="community-text" name="community-text" rows="3"></textarea>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--        <div class="col">-->
+<!--            <input type="checkbox" id="community-secrete" name="community-secrete">-->
+<!--            <input type="checkbox" id="community-id" name="community-secrete" style="display:none;">-->
+<!--            <label for="community-secrete">비공개</label>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--        <div class="col">-->
+<!--            <button id="write-community-btn" type="button" class="btn btn-primary" onclick="writeCommunity(this.innerHTML)">작성</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+{% block content %}{% endblock %}
 </body>
 </html>

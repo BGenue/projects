@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>일정</title>
+
+    <meta name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0, shrink-to-fit=no"/>
+
+    <meta property="og:title" content="지누스쿠버"/>
+    <meta property="og:description" content="너도 다이빙할 수 이써!"/>
+    <meta property="og:url" content="scubawithgnb.shop"/>
+    <meta property="og:image" content="{{ url_for('static', filename='nudi.png') }}"/>
+
+    <!--  font  -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!--  css  -->
+    <link rel="stylesheet" type="text/css" href="static/index.css"/>
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <style>
+        .wrapper {
+            padding-bottom: 16px;
+        }
+
+        #calendar {
+            /*background-color: mediumseagreen;*/
+        }
+
+        .calendar-cell {
+            border: 1px solid black;
+            background-color: indianred;
+            border-radius: 5px;
+            margin: 2px;
+            padding: 10px;
+        }
+
+        .caldendar-head .col {
+            border: 1px solid black;
+            border-radius: 5px;
+            margin: 2px;
+            background-color: lightgreen;
+        }
+
+        #main {
+            padding: 3rem 2rem;
+        }
+    </style>
+
+    <script>
+        let today = new Date();
+        let num = get_month(9);//today.getUTCMonth()
+
+        //원하는 달의 달력에 쓰일 숫자들 가져와
+        function get_month(m) {
+            let num = [];
+            //이번달 월, 일수, 오늘, 요일 체크
+            let today = new Date(new Date().setUTCMonth(m-1));//오늘
+            today = new Date(today.setUTCDate(1));
+            let month = today.getUTCMonth();//이번달
+            let year = today.getUTCFullYear();//이번년도
+            let month_date = find_month_last_date(month, year);//일수
+            let month_day = today.getUTCDay();//오늘 요일
+            let today_date = today.getUTCDate();//오늘 일
+
+            console.log(today, (month + 1) + "월", month_date + "일", month_day + "요일", "오늘은 " + today_date);
+
+            //보여줄 이전달 일
+            if (month_day > 0) {
+                //달력에 쓸 숫자 체크
+                let prev_month_last_date = find_month_last_date(month - 1, year);
+                console.log(month, prev_month_last_date);
+                console.log("앞에 필요한 일수는 " + month_day + "개 입니다");
+                console.log((prev_month_last_date - (month_day - 1)) + "부터 " + prev_month_last_date + "까지");
+                for (let i = 0; i < month_day; i++) {
+                    num.push(prev_month_last_date - (month_day - 1) + i);
+                }
+            }
+
+            let need = 42 - month_day - month_date;
+            //보여줄 이번달 일
+            for (let i = 0; i < month_date + need; i++) {
+                if (i < month_date) {
+                    //이번달
+                    num.push(i + 1);
+                } else {
+                    //다음달
+                    num.push(i - month_date + 1);
+                }
+            }
+            num.push();
+            console.log(num);
+            return num;
+        }
+
+        //month의 일수 체크
+        function find_month_last_date(month, year) {
+            if (month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11) {
+                return 31;
+            } else if (month == 1) {
+                if (year % 4 == 0) {
+                    return 29;
+                } else {
+                    return 28;
+                }
+            } else {
+                return 30;
+            }
+        };
+
+
+        //main 점보트론 높이 받아와
+        $(document).ready(function () {
+            //console.log($('#main').height());
+            //console.log($('html').height());
+            //console.log($('#main').outerHeight(true));
+            //console.log($('body').height() - $('#main').outerHeight(true) - 16);
+            //$('.wrapper').height($('body').height() - $('#main').outerHeight(true) - 16);
+
+            //calendar-cell 찾아
+            console.log($('.calendar-cell').length);
+            let m = 0;
+            $('.calendar-cell').each(function (index) {
+                $(this).text(num[index]);
+                if(m == 0){
+                    $(this).css("background-color", "darkgray");
+                    if(num[index] == 1)
+                    {
+                        m = 1;
+                        $(this).css("background-color", "indianred");
+                    }
+                }
+                else
+                {
+                    if(num[index] == 1)
+                    {
+                        m = 0;
+                        $(this).css("background-color", "darkgray");
+                    }
+                }
+            });
+
+            $('.calendar-cell').height($('.calendar-cell').width());
+
+            $(window).resize(function () {
+                //console.log("resize");
+                //$('.wrapper').height($('body').height() - $('#main').outerHeight(true) - 16);
+                $('.calendar-cell').height($('.calendar-cell').width());
+            });
+        });
+
+    </script>
+</head>
+<body>
+<div class="jumbotron" id="main">
+    <h1 class="display-4">안녕하세요~!</h1>
+    <p class="lead">다이빙 배우실 준비 되셨나요!?</p>
+    <hr class="my-4">
+    <p>IANTD 강사 배진우 입니다!</p>
+    <div role="navigation">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="nav-item"><a class="nav-link" href="/">메인</a></li>
+            <li class="nav-item"><a class="nav-link" href="introduce">강사 소개</a></li>
+            <li class="nav-item"><a class="nav-link" href="course">교육 과정</a></li>
+            <li class="nav-item"><a class="nav-link" href="board">질의 게시판</a></li>
+            <li class="nav-item"><a class="nav-link" href="photo">다이빙 사진</a></li>
+            <li class="nav-item"><a class="nav-link active" href="plan">다이빙 일정</a></li>
+        </ul>
+    </div>
+</div>
+<div class="wrapper">
+    <div id="calendar" class="container">
+        <div class="row caldendar-head">
+            <div class="col">
+                일
+            </div>
+            <div class="col">
+                월
+            </div>
+            <div class="col">
+                화
+            </div>
+            <div class="col">
+                수
+            </div>
+            <div class="col">
+                목
+            </div>
+            <div class="col">
+                금
+            </div>
+            <div class="col">
+                토
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+        </div>
+        <div class="row ">
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+        </div>
+        <div class="row ">
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+        </div>
+        <div class="row ">
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+        </div>
+        <div class="row ">
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+        </div>
+        <div class="row ">
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+            <div class="col calendar-cell">a</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
