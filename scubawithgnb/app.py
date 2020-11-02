@@ -11,6 +11,7 @@ import os
 
 #배포용
 client = MongoClient('mongodb://test:test@localhost',27017)
+
 db = client.scubapage
 
 
@@ -39,13 +40,13 @@ def photo():
 def photo_list():
     path = "./static/diving"
     photo_list = os.listdir(path)
-    print(photo_list);
+
     list={'photo_list': photo_list}
     return list;
 
-@app.route('/plan')
-def plan():
-    return render_template('plan.html', title="다이빙 일정")
+@app.route('/schedule')
+def schedule():
+    return render_template('schedule.html', title="다이빙 일정")
 
 
 ## API 역할을 하는 부분
@@ -58,7 +59,7 @@ def write_community():
     community_secrete = request.form['secrete'];
     community_title = request.form['title'];
     community_id = request.form['id'];
-    print(community_text)
+
     doc = {
         'community_name': community_name,
         'community_password': community_password,
@@ -99,7 +100,7 @@ def fix_community():
     fix_secrete = request.form['secrete'];
     fix_title = request.form['title'];
     fix_id = request.form['id'];
-    print(fix_name, fix_password, fix_text, fix_secrete, fix_title, fix_id)
+
     fix = {
         'community_name': fix_name,
         'community_password': fix_password,
@@ -112,6 +113,27 @@ def fix_community():
     db.community.update_one({'community_id': fix_id}, {'$set': fix})
 
     return jsonify({'result': 'success', 'msg': '글이 수정되었습니다.'})
+
+#일정 저장해
+@app.route('/schedule/save-schedule', methods=['POST'])
+def save_schedule():
+    start_date = request.form['start_date']
+    end_date = request.form['end_date']
+    title = request.form['title']
+    doc={
+        'start_date': start_date,
+        'end_date': end_date,
+        'title': title
+    }
+    db.schedule.insert_one(doc)
+    return jsonify({'result': 'success', 'msg': '일정이 추가되었습니다'})
+
+#일정 가져와
+@app.route('/schedule/get-schedule', methods=['GET'])
+def read_schedule():
+    communities = list(db.schedule.find({}, {'_id': False}))
+
+    return jsonify({'result': 'success', 'communities': communities})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

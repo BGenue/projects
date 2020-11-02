@@ -27,6 +27,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
 
     <script>
         $.ajax({
@@ -34,14 +35,12 @@
             type: 'GET',
             dataType : 'json',
             success : function (list) {
-                console.log(list['photo_list']);
-
                 for(let i = 0 ; i < list['photo_list'].length ; i++)
                 {
-                    let path = 'static/diving/' + list['photo_list'][i];
+                    let photo_path = 'static/diving/' + list['photo_list'][i];
                     let photo_card_html = `<div class="col mb-4">
                                     <div class="card">
-                                        <img src=${path} class="card-img-top" alt="...">
+                                        <img src=${photo_path} class="card-img-top" alt="...">
                                         <div class="card-body">
                                             <h5 class="card-title">Card title</h5>
                                             <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -49,6 +48,7 @@
                                     </div>
                                 </div>`;
                     $('#photo_container').append(photo_card_html);
+
                 }
             }
         });
@@ -67,7 +67,7 @@
             <li class="nav-item"><a class="nav-link" href="course">교육 과정</a></li>
             <li class="nav-item"><a class="nav-link" href="board">질의 게시판</a></li>
             <li class="nav-item"><a class="nav-link active" href="photo">다이빙 사진</a></li>
-            <li class="nav-item"><a class="nav-link" href="plan">다이빙 일정</a></li>
+            <li class="nav-item"><a class="nav-link" href="schedule">다이빙 일정</a></li>
         </ul>
     </div>
 </div>
