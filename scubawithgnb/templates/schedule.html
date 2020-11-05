@@ -16,8 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
           crossorigin="anonymous">
 
     <!--  css  -->
@@ -40,7 +39,7 @@
 
         .calendar-cell {
             border: 1px solid black;
-            background-color: indianred;
+            background-color: darkgrey;
             margin: 2px;
             padding: 10px;
         }
@@ -53,7 +52,7 @@
         }
 
         #main {
-            padding: 3rem 2rem;
+            /*padding: 3rem 2rem;*/
         }
 
         .month {
@@ -67,16 +66,90 @@
         .col {
             border-radius: 5px;
         }
+
+        .list {
+            text-align: right;
+            color: black;
+        }
+
+        .weekend {
+            color: red;
+        }
+
+        .present-month {
+            background-color: indianred;
+        }
     </style>
 
     <script>
+        //document ready
+        $(document).ready(function () {
+            let today = new Date();
+            let month = today.getUTCMonth();
+            let year = today.getUTCFullYear();
+            change_calendar(year, month);
+
+            //console.log($('#main').height());
+            //console.log($('html').height());
+            //console.log($('#main').outerHeight(true));
+            //console.log($('body').height() - $('#main').outerHeight(true) - 16);
+            //$('.wrapper').height($('body').height() - $('#main').outerHeight(true) - 16);
+
+            $('.calendar-cell').height($('.calendar-cell').width());
+
+            $(window).resize(function () {
+                //console.log("resize");
+                //$('.wrapper').height($('body').height() - $('#main').outerHeight(true) - 16);
+                $('.calendar-cell').height($('.calendar-cell').width());
+            });
+
+            // insert_schedule(2020, 11, 2, 2020, 11, 5, '테스트0');
+            // insert_schedule(2020, 11, 6, 2020, 11, 7, '테스트1');
+            // insert_schedule(2020, 11, 30, 2020, 12, 8, '테스트2');
+            // insert_schedule(2020, 10, 20, 2020, 11, 1, '테스트3');
+            // insert_schedule(2020, 10, 9, 2020, 10, 11, '테스트4');
+            // insert_schedule(2019, 12, 1, 2020, 12, 3, '테스트5');
+            // insert_schedule(2020, 12, 29, 2021, 1, 2, '테스트6');
+            // insert_schedule(2021, 1, 9, 2021, 1, 14, '테스트7');
+
+        });
+
+        //원하는 달로 달력 바꿔
+        function change_calendar(year, month) {
+            console.log("change_calendar()");
+            let num = get_month(year, month);//today.getUTCMonth()
+            getSchedule(year, month, num);
+
+            let m = 0;//이번달인지 아닌지 구분
+            //css 변경
+            // $('.calendar-cell').each(function (index) {
+            //     if (m == 0) {
+            //         //저번달
+            //         $(this).css("background-color", "darkgray");
+            //         if (num[index] == 1) {
+            //             //이번달 1일
+            //             m = 1;
+            //             $(this).css("background-color", "indianred");
+            //         }
+            //     } else {
+            //         //이번달
+            //         $(this).css("background-color", "indianred");
+            //         if (num[index] == 1) {
+            //             //다음달 1일
+            //             m = 0;
+            //             $(this).css("background-color", "darkgray");
+            //         }
+            //     }
+            // });
+        }
+
         //원하는 달의 달력에 쓰일 숫자들 가져와
         function get_month(y, m) {
             let num = [];
             //원하는 달 월, 일수, 오늘, 요일 체크
             let today = new Date(new Date().setUTCFullYear(y, m, 1));//원하는 달 1일
-            let month = today.getUTCMonth();//이번달
-            let year = today.getUTCFullYear();//이번년도
+            let month = m;//이번달
+            let year = y;//이번년도
             let month_date = find_month_last_date(month, year);//일수
             let month_day = today.getUTCDay();//1일 요일
             let today_date = today.getUTCDate();//1일 일
@@ -106,13 +179,17 @@
                     num.push(i - month_date + 1);
                 }
             }
-            num.push();
+            //num.push();
             //console.log(num);
             return num;
         }
 
         //month의 일수 체크
         function find_month_last_date(month, year) {
+            console.log("find_month_last_date : ", month, year);
+            if (month == -1) {
+                month = 11;
+            }
             if (month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11) {
                 return 31;
             } else if (month == 1) {
@@ -124,73 +201,13 @@
             } else {
                 return 30;
             }
-        };
-
-        function change_calendar(year, month)
-        {
-            let num = get_month(year, month);//today.getUTCMonth()
-            $('#month').text(year + "년 " + (month+1) + '월');
-
-            //calendar-cell 찾아
-            console.log($('.calendar-cell').length);
-            let m = 0;//이번달인지 아닌지 구분
-            $('.calendar-cell').each(function (index) {
-                $(this).text(num[index]);
-                if (index % 7 == 0 || index % 7 == 6) {
-                    //토요일, 일요일 숫자 빨강
-                    $(this).css("color", "red");
-                }
-                if (m == 0) {
-                    //저번달
-                    $(this).css("background-color", "darkgray");
-                    if (num[index] == 1) {
-                        //이번달 1일
-                        m = 1;
-                        $(this).css("background-color", "indianred");
-                    }
-                } else {
-                    //이번달
-                    $(this).css("background-color", "indianred");
-                    if (num[index] == 1) {
-                        //다음달 1일
-                        m = 0;
-                        $(this).css("background-color", "darkgray");
-                    }
-                }
-            });
         }
 
-
-        //main 점보트론 높이 받아와
-        $(document).ready(function () {
-            let today = new Date();
-            let month = today.getUTCMonth();
-            let year = today.getUTCFullYear();
-            change_calendar(year, month);
-
-            //console.log($('#main').height());
-            //console.log($('html').height());
-            //console.log($('#main').outerHeight(true));
-            //console.log($('body').height() - $('#main').outerHeight(true) - 16);
-            //$('.wrapper').height($('body').height() - $('#main').outerHeight(true) - 16);
-
-            $('.calendar-cell').height($('.calendar-cell').width());
-
-            $(window).resize(function () {
-                //console.log("resize");
-                //$('.wrapper').height($('body').height() - $('#main').outerHeight(true) - 16);
-                $('.calendar-cell').height($('.calendar-cell').width());
-            });
-
-            //insert_schedule(1, 2, '테스트');
-        });
-
-        function insert_schedule(start, end, title) {
-
+        function insert_schedule(start_year, start_month, start_date, end_year, end_month, end_date, title) {
             $.ajax({
                 type: "POST",
                 url: "/schedule/save-schedule",
-                data: {start_date: start, end_date: end, title: title},
+                data: {start_year: start_year, start_month: start_month, start_date: start_date, end_year: end_year, end_month: end_month, end_date: end_date, title: title},
                 success: function (response) {
                     if (response["result"] == "success") {
                         alert(response["msg"]);
@@ -200,45 +217,107 @@
             });
         }
 
-        //일정 가져와
-        $.ajax({
-            type: "GET",
-            url: "/schedule/get-schedule",
-            data: {},
-            success: function (response) {
-                if (response["result"] == "success") {
-                    console.log("성공");
-                }
-            }
-        });
-
-        function changeMonth(target){
+        //방향 버튼 눌리면
+        function changeMonth(target) {
             let arrow = $(target).text();
             let y = $('#month').text().split(" ")[0].slice(0, -1)
             let m = $('#month').text().split(" ")[1].slice(0, -1);//보여주는 달
-            if(arrow == '<')
-            {
+            if (arrow == '<') {
                 m = m - 1;
 
-            }
-            else if(arrow == '>')
-            {
+            } else if (arrow == '>') {
                 m = m - 1 + 2;
             }
-            if(m == 13)
-            {
+            if (m == 13) {
                 m = 1;
                 y = y - 1 + 2;
-            }
-            else if(m == 0)
-            {
+            } else if (m == 0) {
                 m = 12;
                 y = y - 1;
             }
             $('#month').text(y + "년 " + m + "월");
             // let num = get_month(y, m-1);
             // console.log("바뀐 달 : " + num);
-            change_calendar(y, m-1);
+            change_calendar(y, m - 1);
+        }
+
+        //일정 가져와
+        function getSchedule(year, month, num) {
+            console.log("getSchedule()");
+            month = month + 1;
+            $('#month').text(year + "년 " + month + '월');
+            console.log(year + " " + month + "의 달력에 쓸 일정 가져와");
+            console.log("달력 숫자들 : ", num);
+            $.ajax({
+                type: "GET",
+                url: "/schedule/get-schedule",
+                data: {year: year, month: month},
+                success: function (response) {
+                    if (response["result"] == "success") {
+
+                        let m = 0;//이번달인지 아닌지 구분
+                        $('.calendar-cell').each(function (index) {
+                            $(this).children('.date').text(num[index]);
+                            $(this).children('.list').text("");
+
+                            if (m == 0) {
+                                //저번달
+                                $(this).removeClass("present-month");
+                                if (num[index] == 1) {
+                                    //이번달 1일
+                                    m = 1;
+                                    $(this).addClass("present-month");
+                                }
+                            } else {
+                                //이번달
+                                $(this).addClass("present-month");
+                                if (num[index] == 1) {
+                                    //다음달 1일
+                                    m = 0;
+                                    $(this).removeClass("present-month");
+                                }
+                            }
+                        });
+                        let schedules = response['schedule'];
+
+                        for (let i = 0; i < schedules.length; i++) {
+                            let start_year = schedules[i]['start_year'];
+                            let start_month = schedules[i]['start_month']*1;
+                            let start_date = schedules[i]['start_date']*1;
+                            let end_month = schedules[i]['end_month']*1;
+                            let end_date = schedules[i]['end_date']*1;
+                            let end_year = schedules[i]['end_year'];
+                            let title = schedules[i]['title'];
+                            console.log(start_year, start_month, start_date, end_year, end_month, end_date, title);
+
+
+                            $('.present-month').each(function (index) {
+                                if (start_month !== month)//이전부터 이번달까지 일정
+                                {
+                                    if((index + 1) <= end_date)
+                                    {
+                                        $(this).children('.list').text(title);
+                                    }
+                                }
+                                else if (start_month === month && month === end_month)//이번달 일정
+                                {
+                                    if(start_date <= (index + 1) && (index + 1) <= end_date)
+                                    {
+                                        $(this).children('.list').text(title);
+                                    }
+                                }
+                                else if (start_month === month && month !== end_month)//이번달부터 다음까지 일정
+                                {
+                                    if(start_date <= (index + 1))
+                                    {
+                                        $(this).children('.list').text(title);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            });
         }
     </script>
 </head>
@@ -293,59 +372,180 @@
                 토
             </div>
         </div>
-        <div class="row ">
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-        </div>
-        <div class="row ">
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-        </div>
-        <div class="row ">
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-        </div>
-        <div class="row ">
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-        </div>
-        <div class="row ">
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-        </div>
-        <div class="row ">
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
-            <div class="col calendar-cell">a</div>
+        <div class="row">
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
+            <div class="col calendar-cell weekend">
+                <div class="date"></div>
+                <div class="list"></div>
+            </div>
         </div>
     </div>
 </div>
