@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <meta name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, initial-scale=1.0, shrink-to-fit=no"/>
+
+    <meta property="og:title" content="지누스쿠버"/>
+    <meta property="og:description" content="너도 다이빙할 수 이써!"/>
+    <meta property="og:url" content="scubawithgnb.shop"/>
+    <meta property="og:image" content="{{ url_for('static', filename='nudi.png') }}"/>
+
+    <!--  font  -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- jquery -->
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+            crossorigin="anonymous"></script>
+
+    <style>
+        /* Mobile First */
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+            /*스크롤바 숨기기*/
+            -ms-overflow-style: none;
+            color: black;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+            /*width: 16px;*/
+        }
+
+
+        html {
+            width: 100vw;
+            height: 100%;
+            /* 기본 폰트 사이즈 */
+            font-size: 4vw;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input, textarea {
+            outline: none;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            padding: 5px;
+            color: #495057;
+            font-weight: 700;
+
+            transition: all 0.3s ease-in-out;
+        }
+
+        input.ok:focus, textarea.ok:focus {
+            box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+            border: 1px solid rgba(81, 203, 238, 1);
+        }
+
+        input.fill:focus, textarea.fill:focus {
+            box-shadow: 0 0 5px rgb(238, 81, 118);
+            border: 1px solid rgb(238, 81, 118);
+        }
+
+
+        .container {
+            background-color: #d4e9ff;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        .part {
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .part:last-child {
+            margin-bottom: 0;
+        }
+
+        .header {
+            display: grid;
+            grid-template-rows: auto auto;
+            row-gap: 10px;
+            grid-template-areas:
+                    "greetings-bar"
+                    "  menu-bar   ";
+        }
+
+        .greetings-bar {
+            grid-area: greetings-bar;
+        }
+
+        .greetings {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .menu-bar {
+            /*background-color: indianred;*/
+            grid-area: menu-bar;
+            border-radius: 5px;
+
+            display: grid;
+            grid-template-columns:  repeat(6, 1fr);
+            gap: 5px;
+            grid-template-areas:
+                    " main intro course ask gallery schedule ";
+        }
+
+        .menu {
+            /*background-color: darkgoldenrod;*/
+            border: 2px solid indianred;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 5px 5px;
+
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .menu:hover {
+            background-color: #a08d60;
+        }
+
+        .menu:active {
+            box-shadow: 2px 2px black inset;
+        }
+
+        .list-board {
+            height: auto;
+            padding: 0px;
+        }
+
+        .write-btn {
+            width: 10%;
+            font-size: 1rem;
+            float: right;
+        }
+
+        .hide-board {
+            clear:both;
+            padding-bottom: 10px;
+        }
+
+        .row {
+            font-size: 0.7rem;
+            font-weight: 700;
+
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+
+            background-color: beige;
+            border-left: 1px black solid;
+            border-right: 1px black solid;
+            border-bottom: 1px black solid;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row:first-child {
+            background-color: darkgray;
+            border-top: 1px black solid;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            flex-direction: row;
+        }
+
+        .row:last-child {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border-bottom: 1px black solid;
+        }
+
+        .row-first, .row-second {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .row-first {
+            padding-bottom: 5px
+        }
+
+        .row-second {
+            border-top: 1px solid #a09f9f;
+            padding-top: 5px;
+
+            transition: all 1s;
+        }
+
+        .num {
+            flex-basis: 10%;
+            /*padding: 5px;*/
+        }
+
+        .writer {
+            flex-basis: 20%;
+            /*padding: 5px;*/
+        }
+
+        .title {
+            flex-basis: 60%;
+            /*padding: 5px;*/
+        }
+
+        .secret {
+            flex-basis: 10%;
+            /*padding: 5px;*/
+        }
+
+        .content-head {
+            flex-basis: 10%;
+            /*padding: 5px;*/
+        }
+
+        .content {
+            flex-basis: 70%;
+            /*padding: 5px;*/
+        }
+
+        .fix {
+            flex-basis: 10%;
+            /*padding: 5px;*/
+        }
+
+        .delete {
+            flex-basis: 10%;
+            /*padding: 5px;*/
+        }
+
+        .write-board {
+            font-size: 1rem;
+            height: auto;
+            grid-area: write-board;
+        }
+
+        .vertical {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .v-item {
+            flex: 1 1 auto;
+            overflow: auto;
+        }
+
+
+        .btn {
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn.write{
+                padding-bottom: 10px;
+            }
+
+        #input-button {
+            font-size: 1rem;
+            width: auto;
+        }
+
+        .horizon {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .horizon > .vertical {
+            width: 49.5%;
+        }
+
+        #input-content {
+            height: 10vw;
+        }
+
+        #input-secret + label {
+            font-size: 0.8rem;
+        }
+
+        .sidebarL {
+            display: none;
+        }
+
+        .sidebarR {
+            display: none;
+        }
+
+        .footer {
+            clear: both;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+
+        /* 토글되는 부분 */
+        .hide {
+            display: none;
+        }
+
+
+        /* 패드 기준 */
+        @media (min-width: 768px) {
+            html {
+                /* 기본 폰트 사이즈 */
+                font-size: 2.5vw;
+            }
+
+            .container {
+                width: 100%;
+                padding: 10px;
+
+                display: grid;
+                grid-template-columns: minmax(120px, 1fr) 7fr minmax(120px, 1fr);
+                /*header 400px*/
+                grid-template-rows: auto auto auto auto auto auto;
+                gap: 10px 10px;
+                grid-template-areas:
+                    "   .         .     today   "
+                    "header     header  header  "
+                    "sidebarL   list-board    sidebarR"
+                    "sidebarL   write-btn    sidebarR"
+                    "sidebarL   hide-board    sidebarR"
+                    " footer    footer  footer  ";
+            }
+
+            .row{
+                font-size: 0.8rem;
+            }
+
+            .part {
+                margin-bottom: 10px;
+            }
+
+            .today {
+                grid-area: today;
+                font-size: 18px;
+                text-align: center;
+            }
+
+            .header {
+                grid-area: header;
+            }
+
+            .menu {
+                font-size: 1rem;
+            }
+
+            .list-board {
+                height: auto;
+                grid-area: list-board;
+                /*background-attachment: fixed;*/
+                margin-bottom: 0px;
+                padding: 0px;
+            }
+
+            .btn.write{
+                grid-area: write-btn;
+                padding-bottom: 0px;
+            }
+
+            .write-btn {
+                width: auto;
+                font-size: 1rem;
+                place-self: end;
+            }
+
+            .hide-board {
+                grid-area: hide-board;
+                padding-bottom: 0px;
+            }
+
+            .write-board {
+                font-size: 0.8rem;
+                height: auto;
+                /*background-attachment: fixed;*/
+
+            }
+
+            .sidebarL {
+                grid-area: sidebarL;
+            }
+
+            .sidebarR {
+                grid-area: sidebarR;
+            }
+
+            .footer {
+                grid-area: footer;
+            }
+
+        }
+
+        /*  데스크탑 기준  */
+        @media (min-width: 1024px) {
+            html {
+                /* 기본 폰트 사이즈 */
+                font-size: 1.5vw;
+            }
+
+            .today {
+                font-size: 1.1rem;
+            }
+
+            .greetings {
+                font-size: 2.7rem;
+            }
+
+            .menu {
+                font-size: 1rem;
+            }
+
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="part today">날짜</div>
+    <div class="part header">
+        <div class="greetings-bar">
+            <div class="greetings">
+                SCUBUDDY
+            </div>
+            <div>
+                IANTD 강사 배진우입니다
+            </div>
+            <div>
+                안녕하세요~~~
+            </div>
+            <div>
+                안녕하세요~~~~
+            </div>
+            <div>
+                IANTD 강사 배진우입니다
+            </div>
+            <div>
+                안녕하세요~~~
+            </div>
+        </div>
+        <div class="menu-bar">
+            <a class="menu main" href="/">메인</a>
+            <a class="menu intro" href="/introduce">강사 소개</a>
+            <a class="menu course" href="/course">과정 소개</a>
+            <a class="menu ask" href="/askboard">문의 게시판</a>
+            <a class="menu gallery" href="/gallery">다이빙 사진</a>
+            <a class="menu schedule" href="./schedule">다이빙 일정</a>
+        </div>
+    </div>
+    <div class="part list-board">
+        <div class="row">
+            <div class="num">글목록</div>
+            <div class="writer">작성자</div>
+            <div class="title">제목</div>
+            <div class="secret">비밀글</div>
+        </div>
+    </div>
+    <div class="btn write">
+        <button class="write-btn" onclick="showBoard(this)">작성</button>
+    </div>
+    <div class="hide-board" style="display: none">
+        <div class="part write-board">
+            <form method="post" action="/askboard-form" class="vertical" id="form-writer" name="formBoard">
+                <div class="v-item horizon">
+                    <div class="vertical">
+                        <label for="input-writer" class="v-item">작성자</label>
+                        <input type="text" id="input-writer" name="writer" class="v-item ok">
+                    </div>
+                    <div class="vertical">
+                        <label for="input-pw" class="v-item">비밀번호</label>
+                        <input type="password" id="input-pw" name="password" class="v-item  ok">
+                    </div>
+                </div>
+                <div class="v-item vertical">
+                    <label for="input-title" class="v-item">제목</label>
+                    <input type="text" id="input-title" name="title" class="v-item  ok">
+                </div>
+                <div class="v-item vertical">
+                    <label for="input-content" class="v-item">내용</label>
+                    <textarea id="input-content" name="content" class="v-item  ok"></textarea>
+                </div>
+                <div class="v-item">
+                    <input type="checkbox" id="input-secret" name="secret" value="secret" class="v-item  ok">
+                    <label for="input-secret" class="v-item">비공개</label>
+                </div>
+                <div class="v-item btn">
+                    <button type="button" id="input-button" onclick="submitBtn()">작성</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="part sidebarL">왼쪽사이드</div>
+    <div class="part sidebarR">오른쪽사이드</div>
+    <div class="part footer">
+        <div class="">사업자등록번호</div>
+        <div class="">스쿠버디 / 대표 배진우 / 전화 / 문의 이메일 / copyright 등등</div>
+        <div class="">인스타</div>
+        <div class="">카카오톡</div>
+    </div>
+</div>
+
+<script>
+    // 기준 width : document.getElementsByTagName('html')[0].clientWidth
+    // window.innerwidth 하면 스크롤바 포함 너비가 됨
+
+    //오늘 날짜 받아와
+    function getToday() {
+        let today = new Date();
+        let today_div = document.getElementsByClassName("today")[0];
+        today_div.innerHTML = today.getUTCFullYear() + ". " + (today.getUTCMonth() + 1) + ". " + today.getUTCDate();
+    }
+
+    //화면별 메뉴 텍스트 바꿔
+    function changeMenuText(w) {
+        if (w < 768) {
+            let texts = document.getElementsByClassName("menu");
+            for (let i = 0; i < texts.length; i++) {
+                texts[i].innerHTML = texts[i].innerHTML.replace(' ', '<br>');
+            }
+        } else {
+            let texts = document.getElementsByClassName("menu");
+            for (let i = 0; i < texts.length; i++) {
+                texts[i].innerHTML = texts[i].innerHTML.replace('<br>', ' ');
+            }
+        }
+    }
+
+    //게시글 받아와
+    function getArticles() {
+        $.ajax({
+            type: "GET",
+            url: "/askboard-form",
+            data: {},
+            success: function (response) {
+                if (response["result"] == "success") {
+                    let articles = response['articles'];
+                    console.log(typeof (articles));
+                    for (let i = 0; i < articles.length; i++) {
+                        console.log(articles[i]);
+                        makeRow(articles[i], i);
+                    }
+                }
+            }
+        });
+        $('.list-board').on('click', ".row.article", function (event) {
+            //수정, 삭제 눌렸으면
+            if (event.target.className == "fix") {
+                let pw = prompt("비밀번호를 입력하세요");
+                if ($(this).data("pw") == pw) {
+                    alert("확인");
+                    let id = $(this).data("id");
+                    let first = event.target.parentNode.parentNode.parentNode.firstChild.nextSibling;
+                    let second = event.target.parentNode;
+                    if ($(".hide-board").css("display") == "none") {
+                        $(".hide-board").toggle("fast");
+                        $(".write-btn").text("닫기");
+                        $('#input-button').text("수정");
+
+                        $("#input-writer").val(first.childNodes[3].textContent);
+                        $("#input-pw").val($(this).data("pw"));
+                        $("#input-pw").data("id", id);
+                        $("#input-title").val(first.childNodes[5].textContent);
+                        $("#input-content").val(second.childNodes[3].innerHTML.replace("<br>", "\n"));
+                        if (first.childNodes[7].textContent == "O") {
+                            $("#input-secret").prop("checked", true);
+                        }
+                    }
+                } else {
+                    alert("비밀번호 틀림");
+                }
+            } else if (event.target.className == "delete") {
+                console.log($(this).data("id"));
+                let id = $(this).data("id");
+                let pw = prompt("비밀번호를 입력하세요");
+                let password = $(this).data("pw") + "";
+                console.log(password + ", " + pw);
+                if (password == pw) {
+                    alert("확인");
+                    $.ajax({
+                        type: "POST",
+                        url: "/askboard-form/delete",
+                        data: {id: id},
+                        success: function (response) {
+                            if (response["result"] == "success") {
+                                alert(response["msg"]);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                } else {
+                    alert("비밀번호 틀림");
+                }
+            } else {
+                if ($(this).children("div:last").css("display") != "none") {
+                    $(this).children("div:last").toggle("fast");
+                } else {
+                    if ($(this).children('.row-first').children(".secret").text() == "O") {
+                        let pw = prompt("비밀번호를 입력하세요");
+                        pw = parseInt(pw);
+                        if ($(this).data("pw") == pw) {
+                            alert("확인");
+                            $(this).children("div:last").toggle("fast");
+                        } else {
+                            alert("비밀번호 틀림");
+                        }
+                    } else {
+                        $(this).children("div:last").toggle("fast");
+                    }
+                }
+            }
+        })
+
+
+        $('.list-board').on('mouseenter', ".row.article", function (event) {
+            $(this).css("background-color", "#e3e38e")
+        })
+
+        $('.list-board').on('mouseleave', ".row.article", function (event) {
+            $(this).css("background-color", "#F5F5DC")
+        })
+
+
+    }
+
+    function postArticles() {
+        let id = (parseInt($(".row.article").last().data("id")) + 1) + "";
+        let writer = $('#input-writer').val();
+        let password = $('#input-pw').val();
+        let content = $('#input-content').val();
+        content = content.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        let secret = "";
+        $('input-secret').is(":checked") ? secret = "O" : secret = "X";
+        let title = $('#input-title').val();
+        let today = new Date();
+        let date = today.getUTCFullYear() + "." + (today.getUTCMonth() + 1) + "." + today.getUTCDate();
+
+        console.log(id, writer, password, content, title, secret, date);
+        $.ajax({
+            type: "POST",
+            url: "/askboard-form",
+            data: {
+                id: id,
+                writer: writer,
+                password: password,
+                content: content,
+                secret: secret,
+                title: title,
+                write_date: date
+            },
+            success: function (response) {
+                if (response["result"] == "success") {
+                    alert(response["msg"]);
+                    window.location.reload();
+                }
+            }
+        });
+    }
+
+    function fixArticles() {
+
+        let writer = $('#input-writer').val();
+        let password = $('#input-pw').val();
+        let content = $('#input-content').val();
+        content = content.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        let secret = "";
+        $('input-secret').is(":checked") ? secret = "O" : secret = "X";
+        let title = $('#input-title').val();
+        let id = $('#input-pw').data('id');
+
+        $.ajax({
+            type: "POST",
+            url: "/askboard-form/fix",
+            data: {
+                id: id,
+                writer: writer,
+                password: password,
+                content: content,
+                secret: secret,
+                title: title,
+            },
+            success: function (response) {
+                if (response["result"] == "success") {
+                    alert(response["msg"]);
+                    window.location.reload();
+                }
+            }
+        });
+    }
+
+    function showBoard() {
+
+        if ($(".hide-board").css("display") == "none") {
+            $('.write-btn').text("닫기");
+            initInput();
+        } else {
+            $('.write-btn').text("작성");
+        }
+        $(".hide-board").toggle("fast");
+    }
+
+    function makeRow(article, i) {
+        let row_html = `<div class="row article" data-id=${article['_id']} data-pw=${article['password']} data-date="${article['write_date']}"}>
+                            <div class="row-first">
+                                <div class="num">${i + 1}</div>
+                                <div class="writer">${article['writer']}</div>
+                                <div class="title">${article['title']}</div>
+                                <div class="secret">${article['secret']}</div>
+                            </div>
+                            <div style="display:none">
+                                <div  class="row-second">
+                                    <div class="content-head">내용</div>
+                                    <div class="content">${article['content']}</div>
+                                    <div class="fix">수정</div>
+                                    <div class="delete">삭제</div>
+                                </div>
+                            </div>
+                        </div>`;
+        if(`${article['title']}` == "공지")
+        {
+            console.log("공지입니다");
+        }
+        $(".list-board").append(row_html);
+
+
+        // let row = document.createElement('div');
+        // row.setAttribute('class', 'row');
+        //
+        // let first = document.createElement('div');
+        // first.setAttribute('class', 'row-first');
+        // let num = document.createElement('div');
+        // num.setAttribute('class', 'num');
+        // num.innerText = (i + 1) + "";
+        // first.appendChild(num);
+        // let writer = document.createElement('div');
+        // writer.setAttribute('class', 'writer');
+        // writer.innerText = article['community_name'];
+        // first.appendChild(writer);
+        // let title = document.createElement('div');
+        // title.setAttribute('class', 'title');
+        // title.innerText = article['community_title'];
+        // first.appendChild(title);
+        // let secret = document.createElement('div');
+        // secret.setAttribute('class', 'secret');
+        // secret.innerText = article['community_secrete'];
+        // first.appendChild(secret);
+        // row.appendChild(first);
+        //
+        // let second = document.createElement('div');
+        // second.setAttribute('class', 'row-second hide');
+        // let head = document.createElement('div');
+        // head.setAttribute('class', 'content-head');
+        // head.innerText = "내용";
+        // second.appendChild(head);
+        // let content = document.createElement('div');
+        // content.setAttribute('class', 'content');
+        // content.innerHTML = article['community_text'];
+        // second.appendChild(content);
+        // let fix = document.createElement('div');
+        // fix.setAttribute('class', 'fix');
+        // fix.innerText = "수정";
+        // second.appendChild(fix);
+        // let del = document.createElement('div');
+        // del.setAttribute('class', 'delete');
+        // del.innerText = "삭제";
+        // second.appendChild(del);
+        //
+        // row.appendChild(second);
+
+        // first.addEventListener('click', toggleRow);
+        // first.addEventListener('mouseover', mouseOver);
+        // first.addEventListener('mouseout', mouseOut);
+        //
+        // second.addEventListener('click', toggleRow);
+        // second.addEventListener('mouseover', mouseOver);
+        // second.addEventListener('mouseout', mouseOut);
+        // $('.row-first').on('click', function(event){
+        //     console.log(event);
+        //     toggleRow(event);
+        // });
+        // $('.row-first').on('mouseover', mouseOver);
+        // $('.row-first').on('mouseout', mouseOut);
+        //
+        // $('.row-second').on('click', function(event){
+        //     toggleRow(event);
+        // });
+        // $('.row-second').on('mouseover', mouseOver);
+        // $('.row-second').on('mouseout', mouseOut);
+        // return row_html;
+    }
+
+    // function toggleRow(event) {
+    //     console.log(event.currentTarget);
+    //     // let target = event['target'].parentNode;
+    //
+    //     let target = event.currentTarget.next();
+    //     console.log(target);
+    //     if (target.nextSibling != null) {
+    //         target = target.nextSibling;
+    //     }
+    //     if (target.classList.contains("hide")) {
+    //         target.classList.remove("hide");
+    //     } else {
+    //         target.classList.add("hide");
+    //     }
+    // }
+    //
+    // function mouseOver(event) {
+    //     console.log(event['target']);
+    //     let target = event['target'].parentNode.parentNode;//row
+    //     target.style.backgroundColor = "#e3e38e";
+    // }
+    //
+    // function mouseOut(event) {
+    //     console.log(event['target']);
+    //     let target = event['target'].parentNode.parentNode;//row
+    //     target.style.backgroundColor = "#F5F5DC";
+    // }
+
+    function submitBtn() {
+        if (!document.getElementsByName('writer')[0].value) {
+            alert("작성자를 입력해주세요");
+            document.getElementsByName('writer')[0].classList.add("fill");
+            document.getElementsByName('writer')[0].classList.remove("ok");
+            document.getElementsByName('writer')[0].focus();
+            return false;
+        } else {
+            document.getElementsByName('writer')[0].classList.add("ok");
+            document.getElementsByName('writer')[0].classList.remove("fill");
+        }
+
+        if (!document.getElementsByName('password')[0].value) {
+            alert("비밀번호를 입력해주세요");
+            document.getElementsByName('password')[0].classList.add("fill");
+            document.getElementsByName('password')[0].classList.remove("ok");
+            document.getElementsByName('password')[0].focus();
+            return false;
+        } else {
+            document.getElementsByName('password')[0].classList.add("ok");
+            document.getElementsByName('password')[0].classList.remove("fill");
+        }
+
+        if (!document.getElementsByName('title')[0].value) {
+            alert("제목을 입력해주세요");
+            document.getElementsByName('title')[0].classList.add("fill");
+            document.getElementsByName('title')[0].classList.remove("ok");
+            document.getElementsByName('title')[0].focus();
+            return false;
+        } else {
+            document.getElementsByName('title')[0].classList.add("ok");
+            document.getElementsByName('title')[0].classList.remove("fill");
+        }
+
+        if (!document.getElementsByName('content')[0].value) {
+            alert("내용을 입력해주세요");
+            document.getElementsByName('content')[0].classList.add("fill");
+            document.getElementsByName('content')[0].classList.remove("ok");
+            document.getElementsByName('content')[0].focus();
+            return false;
+        } else {
+            document.getElementsByName('content')[0].classList.add("ok");
+            document.getElementsByName('content')[0].classList.remove("fill");
+        }
+        if ($("#input-button").textContent == "작성") {
+            postArticles();
+        } else {
+            fixArticles();
+        }
+        initInput();
+    }
+
+    function initInput() {
+        document.getElementsByName('writer')[0].value = "";
+        document.getElementsByName('password')[0].value = "";
+        document.getElementsByName('title')[0].value = "";
+        document.getElementsByName('content')[0].value = "";
+        document.getElementsByName('secret')[0].checked = false;
+        $("#input-button").text("작성");
+    }
+
+
+    window.onload = function () {
+        console.log("onload");
+
+        //글들 불러와
+        getArticles();
+
+        let htmlWidth = document.getElementsByTagName('html')[0].clientWidth;
+
+        if (htmlWidth > 1023) {
+            console.log('데스크탑');
+        } else if (htmlWidth > 767) {
+            console.log('태블릿, 패드');
+        } else {
+            console.log('핸드폰');
+        }
+        getToday();
+        changeMenuText(htmlWidth);
+    }
+
+    window.onresize = function () {
+        console.log("resize");
+        let htmlWidth = document.getElementsByTagName('html')[0].clientWidth;
+        console.log(htmlWidth);
+        if (htmlWidth > 1023) {
+            console.log('데스크탑');
+        } else if (htmlWidth > 768) {
+            console.log('태블릿, 패드');
+        } else {
+            console.log('핸드폰');
+        }
+        changeMenuText(htmlWidth);
+    }
+</script>
+</body>
+</html>

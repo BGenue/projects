@@ -1,0 +1,312 @@
+* {
+    padding: 0;
+    margin: 0;
+    color: black;
+    box-sizing: border-box;
+
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    min-height: 100%;
+    background-color: #9cc8e0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    width: 90vw;
+    margin: 0px auto;
+    /*background-color: indianred;*/
+    padding: 10px;
+}
+
+.common {
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.common:last-child {
+    margin-bottom: 0;
+}
+
+.today {
+    height: 30px;
+    text-align: right;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+.header {
+    height: 40vh;
+
+    display: grid;
+    /*grid-template-columns: 1fr 3fr 1fr;*/
+    grid-template-rows: 5fr 1fr;
+    row-gap: 10px;
+    grid-template-areas:
+                    " .  "
+                    "menu-bar";
+}
+
+.greetings {
+    font-size: 2.5rem;
+    font-weight: 900;
+}
+
+.menu-bar {
+    grid-area: menu-bar;
+    border-radius: 5px;
+
+    display: grid;
+    grid-template-columns:  repeat(6, 1fr);
+    gap: 10px 10px;
+    grid-template-areas:
+                    " main intro course ask photo schedule ";
+}
+
+.menu {
+    background-color: darkgoldenrod;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: 900;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.menu:hover {
+    background-color: #a08d60;
+}
+
+.menu:active {
+    box-shadow: 2px 2px black inset;
+}
+
+.main {
+    grid-area: main;
+}
+
+.intro {
+    grid-area: intro;
+}
+
+.course {
+    grid-area: course;
+}
+
+.ask {
+    grid-area: ask;
+}
+
+.photo {
+    grid-area: photo;
+}
+
+.img-card {
+    /*display: inline-block;*/
+    background-color: mintcream;
+
+    /*float: left;*/
+
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.image-box-container {
+    background-color: inherit;
+
+    margin: 10px 0px;
+    padding: 0;
+    grid-area: image-box-container;
+
+    height: auto;
+}
+
+.schedule {
+    grid-area: schedule;
+}
+
+.sidebarL {
+    display: none;
+}
+
+.sidebarR {
+    display: none;
+}
+
+.footer {
+    height: 15vh;
+}
+
+@media (min-width: 768px) {
+    .container {
+        width: 98vw;
+        margin: 0px auto;
+        /*background-color: white;*/
+        padding: 10px;
+
+        display: grid;
+        grid-template-columns: minmax(120px, 1fr) 8fr minmax(120px, 1fr);
+        grid-template-rows: 50px auto auto  auto;
+        gap: 10px 10px;
+        grid-template-areas:
+                    "   .         .                    today   "
+                    "header     header                 header  "
+                    "sidebarL   image-box-container    sidebarR"
+                    " footer    footer                 footer  ";
+    }
+
+    .common {
+        /*background-color: white;*/
+        /*border-radius: 5px;*/
+        /*padding: 10px;*/
+        margin-bottom: 0;
+    }
+
+    .today {
+        grid-area: today;
+        height: auto;
+        width: auto;
+
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header {
+        grid-area: header;
+        height: auto;
+
+        display: grid;
+        /*grid-template-columns: 1fr 3fr 1fr;*/
+        grid-template-rows: 5fr 1fr;
+        row-gap: 10px;
+        grid-template-areas:
+                    " .  "
+                    "menu-bar";
+    }
+
+    .greetings {
+        font-size: 5rem;
+    }
+
+    .menu-bar {
+        grid-area: menu-bar;
+        /*background-color: olivedrab;*/
+        border-radius: 5px;
+
+        display: grid;
+        grid-template-columns:  repeat(6, 1fr);
+        gap: 10px 10px;
+        grid-template-areas:
+                    " main intro course ask photo schedule ";
+    }
+
+    .menu {
+        background-color: darkgoldenrod;
+        border-radius: 5px;
+        font-size: 1.2rem;
+
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .main {
+        grid-area: main;
+    }
+
+    .intro {
+        grid-area: intro;
+    }
+
+    .course {
+        grid-area: course;
+    }
+
+    .ask {
+        grid-area: ask;
+    }
+
+    .photo {
+        grid-area: photo;
+    }
+
+    .schedule {
+        grid-area: schedule;
+    }
+
+    .image-box-container {
+        background-color: inherit;
+
+        margin: 10px 0px;
+        padding: 0;
+        grid-area: image-box-container;
+
+        height: auto;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .sidebarL {
+        grid-area: sidebarL;
+    }
+
+    .sidebarR {
+        grid-area: sidebarR;
+    }
+
+    .footer {
+        grid-area: footer;
+        height: auto;
+    }
+
+    /*.image-box-container {*/
+    /*    height: auto;*/
+    /*    padding-bottom: 0;*/
+    /*}*/
+    .img-card {
+        /*display: inline-block;*/
+        /*background-color: mintcream;*/
+
+        float: left;
+
+        /*margin-right: 20px;*/
+        /*margin-bottom: 20px;*/
+        /*border-radius: 5px;*/
+        /*box-sizing: border-box;*/
+        /*padding: 5px;*/
+    }
+}
+
+@media (min-width: 1024px) {
+    .menu {
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <meta name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, initial-scale=1.0, shrink-to-fit=no"/>
+
+    <meta property="og:title" content="지누스쿠버"/>
+    <meta property="og:description" content="너도 다이빙할 수 이써!"/>
+    <meta property="og:url" content="scubawithgnb.shop"/>
+    <meta property="og:image" content="{{ url_for('static', filename='nudi.png') }}"/>
+
+    <!--  font  -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Mobile First */
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+            /*스크롤바 숨기기*/
+            -ms-overflow-style: none;
+            color: black;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+            /*width: 16px;*/
+        }
+
+
+        html {
+            width: 100vw;
+            height: 100%;
+            /* 기본 폰트 사이즈 */
+            font-size: 4vw;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .container {
+            background-color: #9cc8e0;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        .part {
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .part:last-child {
+            margin-bottom: 0;
+        }
+
+        .header {
+            display: grid;
+            grid-template-rows: auto auto;
+            row-gap: 10px;
+            grid-template-areas:
+                    "greetings-bar"
+                    "  menu-bar   ";
+        }
+
+        .greetings-bar {
+            grid-area: greetings-bar;
+        }
+
+        .greetings {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .menu-bar {
+            /*background-color: indianred;*/
+            grid-area: menu-bar;
+            border-radius: 5px;
+
+            display: grid;
+            grid-template-columns:  repeat(6, 1fr);
+            gap: 5px;
+            grid-template-areas:
+                    " main intro course ask gallery schedule ";
+        }
+
+        .menu {
+            /*background-color: darkgoldenrod;*/
+            border: 2px solid indianred;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 5px 5px;
+
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .menu:hover {
+            background-color: #a08d60;
+        }
+
+        .menu:active {
+            box-shadow: 2px 2px black inset;
+        }
+
+        /*.board {*/
+        /*    height: 50vh;*/
+        /*}*/
+
+        .sidebarL {
+            display: none;
+        }
+
+        .sidebarR {
+            display: none;
+        }
+
+        .footer {
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+
+        /* 패드 기준 */
+        @media (min-width: 768px) {
+            html {
+                /* 기본 폰트 사이즈 */
+                font-size: 2.5vw;
+            }
+
+            .container {
+                width: 100%;
+                padding: 10px;
+
+                display: grid;
+                grid-template-columns: minmax(120px, 1fr) 7fr minmax(120px, 1fr);
+                /*header 400px*/
+                grid-template-rows: 50px auto 35vw auto auto;
+                gap: 10px 10px;
+                grid-template-areas:
+                    "   .         .     today   "
+                    "header     header  header  "
+                    "sidebarL   board    sidebarR"
+                    " photos    photos   photos "
+                    " footer    footer  footer  ";
+            }
+
+            .today {
+                grid-area: today;
+                font-size: 18px;
+                text-align: center;
+            }
+
+            .header {
+                grid-area: header;
+            }
+
+            .menu {
+                font-size: 1rem;
+            }
+
+            .sidebarL {
+                grid-area: sidebarL;
+            }
+
+            .sidebarR {
+                grid-area: sidebarR;
+            }
+
+            .footer {
+                grid-area: footer;
+            }
+
+        }
+
+        /*  데스크탑 기준  */
+        @media (min-width: 1024px) {
+            html {
+                /* 기본 폰트 사이즈 */
+                font-size: 2vw;
+            }
+
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="part today">날짜</div>
+    <div class="part header">
+        <div class="greetings-bar">
+            <div class="greetings">
+                SCUBUDDY
+            </div>
+            <div>
+                IANTD 강사 배진우입니다
+            </div>
+            <div>
+                안녕하세요~~~
+            </div>
+            <div>
+                안녕하세요~~~~
+            </div>
+            <div>
+                IANTD 강사 배진우입니다
+            </div>
+            <div>
+                안녕하세요~~~
+            </div>
+        </div>
+        <div class="menu-bar">
+            <a class="menu main" href="/">메인</a>
+            <a class="menu intro" href="/introduce">강사 소개</a>
+            <a class="menu course" href="/course">과정 소개</a>
+            <a class="menu ask" href="/askboard">문의 게시판</a>
+            <a class="menu gallery" href="/gallery">다이빙 사진</a>
+            <a class="menu schedule" href="./schedule">다이빙 일정</a>
+        </div>
+    </div>
+    <div class="part board">
+        <div class="img-box"></div>
+        <div class="level-box">
+            <ul>
+                <li>Enriched Air Nitrox Intructor</li>
+                <li>Navigation Specialty Intructor</li>
+                <li>Boat Diving Specialty Intructor</li>
+                <li>Night Diving Specialty Intructor</li>
+                <li>Drift Diving Specialty Intructor</li>
+                <li>Drysuit Specialty Intructor</li>
+            </ul>
+        </div>
+    </div>
+    <div class="part sidebarL">왼쪽사이드</div>
+    <div class="part sidebarR">오른쪽사이드</div>
+    <div class="part footer">
+        <div class="">사업자등록번호</div>
+        <div class="">스쿠버디 / 대표 배진우 / 전화 / 문의 이메일 / copyright 등등</div>
+        <div class="">인스타</div>
+        <div class="">카카오톡</div>
+    </div>
+</div>
+
+<script>
+    // 기준 width : document.getElementsByTagName('html')[0].clientWidth
+    // window.innerwidth 하면 스크롤바 포함 너비가 됨
+
+    //오늘 날짜 받아와
+    function getToday() {
+        let today = new Date();
+        let today_div = document.getElementsByClassName("today")[0];
+        today_div.innerHTML = today.getUTCFullYear() + ". " + (today.getUTCMonth() + 1) + ". " + today.getUTCDate();
+    }
+
+    //화면별 메뉴 텍스트 바꿔
+    function changeMenuText(w) {
+        if (w < 768) {
+            let texts = document.getElementsByClassName("menu");
+            for (let i = 0; i < texts.length; i++) {
+                texts[i].innerHTML = texts[i].innerHTML.replace(' ', '<br>');
+            }
+        } else {
+            let texts = document.getElementsByClassName("menu");
+            for (let i = 0; i < texts.length; i++) {
+                texts[i].innerHTML = texts[i].innerHTML.replace('<br>', ' ');
+            }
+        }
+    }
+
+    //최신 이미지 받아와
+    function getImage() {
+        console.log("getImage()");
+        let image = JSON.parse(`{{ image | tojson }}`);
+
+        let box = document.getElementsByClassName("img-box")[0];
+
+        let img = document.createElement('img');
+        img.src = image['image'];
+        img.height = 1;
+        img.alt = "내 사진";
+        box.appendChild(img);
+    }
+
+    window.onload = function () {
+        console.log("onload");
+
+        let htmlWidth = document.getElementsByTagName('html')[0].clientWidth;
+
+        if (htmlWidth > 1023) {
+            console.log('데스크탑');
+        } else if (htmlWidth > 768) {
+            console.log('태블릿, 패드');
+        } else {
+            console.log('핸드폰');
+        }
+        getToday();
+        changeMenuText(htmlWidth);
+        slideShow();
+    }
+
+    window.onresize = function () {
+        console.log("resize");
+        let htmlWidth = document.getElementsByTagName('html')[0].clientWidth;
+        console.log(htmlWidth);
+        if (htmlWidth > 1023) {
+            console.log('데스크탑');
+        } else if (htmlWidth > 768) {
+            console.log('태블릿, 패드');
+        } else {
+            console.log('핸드폰');
+        }
+        changeMenuText(htmlWidth);
+    }
+
+    function resize() {
+        //photo resize
+    }
+</script>
+</body>
+</html>

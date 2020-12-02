@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <title>강사 소개</title>
+
+    <meta name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, initial-scale=1.0, shrink-to-fit=no"/>
+
+    <meta property="og:title" content="지누스쿠버"/>
+    <meta property="og:description" content="너도 다이빙할 수 이써!"/>
+    <meta property="og:url" content="scubawithgnb.shop"/>
+    <meta property="og:image" content="{{ url_for('static', filename='nudi.png') }}"/>
+
+    <!--  font  -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;900&display=swap" rel="stylesheet">
+
+    <script type="text/javascript">
+        //     let list = '{{ images.photo_list }}'
+        // console.log(list);
+    </script>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            color: black;
+            box-sizing: border-box;
+
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            min-height: 100%;
+            background-color: #9cc8e0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .container {
+            width: 90vw;
+            margin: 0px auto;
+            /*background-color: indianred;*/
+            padding: 10px;
+        }
+
+        .common {
+            background-color: white;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .common:last-child {
+            margin-bottom: 0;
+        }
+
+        .today {
+            height: 30px;
+            text-align: right;
+
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction: column;
+        }
+
+        .header {
+            height: 40vh;
+
+            display: grid;
+            /*grid-template-columns: 1fr 3fr 1fr;*/
+            grid-template-rows: 5fr 1fr;
+            row-gap: 10px;
+            grid-template-areas:
+                    " .  "
+                    "menu-bar";
+        }
+
+        .greetings {
+            font-size: 2.5rem;
+            font-weight: 900;
+        }
+
+        .menu-bar {
+            grid-area: menu-bar;
+            border-radius: 5px;
+
+            display: grid;
+            grid-template-columns:  repeat(6, 1fr);
+            gap: 10px 10px;
+            grid-template-areas:
+                    " main intro course ask photo schedule ";
+        }
+
+        .menu {
+            background-color: darkgoldenrod;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 900;
+
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .menu:hover {
+            background-color: #a08d60;
+        }
+
+        .menu:active {
+            box-shadow: 2px 2px black inset;
+        }
+
+        .main {
+            grid-area: main;
+        }
+
+        .intro {
+            grid-area: intro;
+        }
+
+        .course {
+            grid-area: course;
+        }
+
+        .ask {
+            grid-area: ask;
+        }
+
+        .photo {
+            grid-area: photo;
+        }
+
+        .img-card {
+            /*display: inline-block;*/
+            background-color: mintcream;
+
+            /*float: left;*/
+
+            margin-right: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            padding: 5px;
+        }
+
+        .image-box-container {
+            background-color: inherit;
+
+            margin: 10px 0px;
+            padding: 0;
+            grid-area: image-box-container;
+
+            height: auto;
+        }
+
+        .schedule {
+            grid-area: schedule;
+        }
+
+        .sidebarL {
+            display: none;
+        }
+
+        .sidebarR {
+            display: none;
+        }
+
+        .footer {
+            height: 15vh;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                width: 98vw;
+                margin: 0px auto;
+                padding: 10px;
+
+                display: grid;
+                grid-template-columns: minmax(120px, 1fr) 8fr minmax(120px, 1fr);
+                grid-template-rows: 50px 400px auto  auto;
+                gap: 10px 10px;
+                grid-template-areas:
+                    "   .         .                    today   "
+                    "header     header                 header  "
+                    "sidebarL   image-box-container    sidebarR"
+                    " footer    footer                 footer  ";
+            }
+
+            .common {
+                margin-bottom: 0;
+            }
+
+            .today {
+                grid-area: today;
+                height: auto;
+                width: auto;
+
+                text-align: center;
+            }
+
+            .header {
+                grid-area: header;
+                height: auto;
+            }
+
+            .greetings {
+                font-size: 5rem;
+            }
+
+            .menu {
+                font-size: 1.2rem;
+            }
+
+            .main {
+                grid-area: main;
+            }
+
+            .intro {
+                grid-area: intro;
+            }
+
+            .course {
+                grid-area: course;
+            }
+
+            .ask {
+                grid-area: ask;
+            }
+
+            .photo {
+                grid-area: photo;
+            }
+
+            .schedule {
+                grid-area: schedule;
+            }
+
+            .image-box-container {
+                background-color: inherit;
+
+                margin: 10px 0px;
+                padding: 0;
+                grid-area: image-box-container;
+
+                height: auto;
+            }
+
+            .sidebarL {
+                grid-area: sidebarL;
+            }
+
+            .sidebarR {
+                grid-area: sidebarR;
+            }
+
+            .footer {
+                grid-area: footer;
+                height: auto;
+            }
+
+            .img-card {
+                float: left;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .menu {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="common today">날짜</div>
+    <div class="common header">
+        <div>
+            <div class="greetings">
+                안녕하세요~~~~
+            </div>
+            <div>
+                IANTD 강사 배진우입니다
+            </div>
+            <div>
+                안녕하세요~~~
+            </div>
+            <div>
+                안녕하세요~~~~
+            </div>
+            <div>
+                IANTD 강사 배진우입니다
+            </div>
+            <div>
+                안녕하세요~~~
+            </div>
+        </div>
+        <div class="menu-bar">
+            <a class="menu main" href="/">메인</a>
+            <a class="menu intro" href="/introduce">강사 소개</a>
+            <a class="menu course" href="/course">과정 소개</a>
+            <a class="menu ask" href="/askboard">문의 게시판</a>
+            <a class="menu photo" href="/gallery">다이빙 사진</a>
+            <a class="menu schedule" href="./schedule">다이빙 일정</a>
+        </div>
+    </div>
+    <div class="common sidebarL">왼쪽사이드</div>
+    <div class="common sidebarR">오른쪽사이드</div>
+    <div class="common image-box-container">
+        <!--        <div class="img-card">
+                        <img>
+                    </div>-->
+    </div>
+    <div class="common footer">
+        <div class="">사업자등록번호</div>
+        <div class="">스쿠버디 / 대표 배진우 / 전화 / 문의 이메일 / copyright 등등</div>
+        <div class="">인스타</div>
+        <div class="">카카오톡</div>
+    </div>
+</div>
+
+<script>
+    function getToday() {
+        //오늘의 날짜
+        let today = new Date();
+        let today_div = document.getElementsByClassName("today")[0];
+        today_div.innerHTML = today.getUTCFullYear() + ". " + (today.getUTCMonth() + 1) + ". " + today.getUTCDate();
+    }
+
+    document.addEventListener('DOMContentLoaded', function (e) {
+        console.log("document load");
+    });
+
+    window.addEventListener('load', function () {
+        console.log("window load");
+    });
+
+
+    window.addEventListener('resize', function (e) {
+    });
+
+    function changeText(w) {
+        if (w < 768) {
+            let texts = document.getElementsByClassName("menu");
+            for (let i = 0; i < texts.length; i++) {
+                texts[i].innerHTML = texts[i].innerHTML.replace(' ', '<br>');
+            }
+        } else {
+            let texts = document.getElementsByClassName("menu");
+            for (let i = 0; i < texts.length; i++) {
+                texts[i].innerHTML = texts[i].innerHTML.replace('<br>', ' ');
+            }
+        }
+    }
+
+    window.onload = function () {
+        console.log("onload");
+        let windowWidth = window.innerWidth;
+        if (windowWidth < 768) {
+            console.log("핸드폰");
+            getImg(1);
+            resize(1);
+        } else if (windowWidth < 1024) {
+            console.log("패드");
+            getImg(3);//패드
+            resize(3);//패드
+        } else {
+            console.log("모니터");
+            getImg(4);//모니터
+            resize(4);//모니터
+        }
+        changeText(windowWidth);
+        getToday();
+    }
+
+    window.onresize = function () {
+        console.log("resize");
+        let windowWidth = window.innerWidth;
+
+        if (windowWidth < 768) {
+            console.log("핸드폰");
+            resize(1);
+        } else if (windowWidth < 1024) {
+            console.log("패드");
+            resize(3);
+        } else {
+            console.log("모니터");
+            resize(4);
+        }
+        changeText(windowWidth);
+    }
+
+    //이미지 받아와서 박스에 보여줘
+    function getImg(col) {
+        let list = JSON.parse(`{{ images | tojson }}`);
+        let container = document.querySelector('.image-box-container');
+        let len = list['photo_list'].length;//사진 갯수
+
+        let last = list['photo_list'].length % col; // 마지막 줄 사진 갯수
+        if (last == 0) {
+            last = col;
+        }
+        last = len - last;//마지막 줄 시작 인덱스
+
+        //img-card 생성 후 img-card-container 삽입. 사이즈는 resize()에서 정해줄거야
+        //img-card > img
+        //col에 따라 맨 오른쪽 애들 maring-right 0으로 만들어
+        for (let i = 0; i < len; i++) {
+            let box = document.createElement('div');
+            box.setAttribute('class', 'img-card');
+
+            //마지막 행은 margin-bottom 없어
+            if (i >= last) {
+                box.style.marginBottom = 0 + "";
+            }
+
+            //마지막 열 box의 maring-right 0
+            if ((i + 1) % col == 0) {
+                box.style.marginRight = 0 + "";
+            }
+            container.appendChild(box);
+
+            //img 생성 후 img-card에 삽입
+            let img = document.createElement('img');
+            img.src = "./static/diving/" + list['photo_list'][i];
+            img.alt = "aa";
+            img.width = 1;//이걸 해줘야 원하는 크기로 되네
+            box.appendChild(img);
+
+            //사진 정보 div 생성 후 img-card 삽입
+            let info = document.createElement('div');
+            info.textContent = "20.11.12";
+            info.style.fontSize = "1rem";
+            box.appendChild(info);
+        }
+    }
+
+    //img-card 사이즈 조절
+    //화면 패드 <=> 모니터 변경되는 경우 margin-right, margin-bottom 조절해줘야해
+    function resize(col) {
+        let container = document.getElementsByClassName("image-box-container")[0];
+        let w = Math.floor(container.getBoundingClientRect().width);
+        console.log("image-box-container w : ", w);
+        if (col == 1) {
+            //1열인 경우
+            // w = Math.floor(w - col * 20);
+            w = Math.floor(w);
+        } else {
+            //2열 이상인 경우 img-card 사이 공간 빼
+            w = Math.floor((w - (col - 1) * 20) / col);
+        }
+
+        let box = document.getElementsByClassName("img-card");
+        console.log("img-card : ", w);
+
+        let last = box.length % col;
+        if (last == 0) {
+            last = col;
+        }
+        last = box.length - last;//마지막 줄 첫번째 요소
+
+        for (let i = 0; i < box.length; i++) {
+            //img-card의 길이 정해
+            box[i].style.width = w + "px";
+            //box[i].style.height = w + "px";
+
+            box[i].style.marginRight = 20 + "px";
+            box[i].style.marginBottom = 20 + "px";
+            if ((i + 1) % col == 0) {
+                box[i].style.marginRight = 0;
+            }
+
+            if (i >= last) {
+                box[i].style.marginBottom = 0;
+            }
+
+            box[i].getElementsByTagName("img")[0].width = (w - 10);//image-box의 좌우 패딩을 제외한 길이
+        }
+    }
+</script>
+</body>
+</html>
